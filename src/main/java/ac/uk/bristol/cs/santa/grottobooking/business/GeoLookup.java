@@ -1,12 +1,11 @@
-package ac.uk.bristol.cs.santa.grottobooking;
+package ac.uk.bristol.cs.santa.grottobooking.business;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,11 +22,11 @@ public class GeoLookup {
                 .build();
     }
 
-    public String geocode(String address) throws InterruptedException, ApiException, IOException {
+    public Pair<Double, Double> latLngFromAddress(String address) throws InterruptedException, ApiException, IOException {
 
         GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(results[0].addressComponents);
+
+        return Pair.of(results[0].geometry.location.lat, results[0].geometry.location.lng);
     }
 
 }

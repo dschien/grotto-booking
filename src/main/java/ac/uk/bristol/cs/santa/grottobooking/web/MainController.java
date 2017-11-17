@@ -16,14 +16,22 @@ package ac.uk.bristol.cs.santa.grottobooking.web;
  * limitations under the License.
  */
 
-import ac.uk.bristol.cs.santa.grottobooking.GeoLookup;
+import ac.uk.bristol.cs.santa.grottobooking.business.GeoLookup;
+import ac.uk.bristol.cs.santa.grottobooking.route.Location;
+import ac.uk.bristol.cs.santa.grottobooking.route.LocationRoutePlanning;
 import com.google.maps.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author Joe Grandja
@@ -70,7 +78,24 @@ public class MainController {
     @RequestMapping(value = "/geolookup", method = RequestMethod.POST)
     @ResponseBody
     public String geolookup(@RequestBody String address) throws InterruptedException, ApiException, IOException {
-        return geoLookup.geocode(address);
+        return String.valueOf(geoLookup.latLngFromAddress(address));
+    }
+
+    @Autowired
+    LocationRoutePlanning routePlanning;
+
+    @RequestMapping(value = "/grottoroute", method = RequestMethod.POST)
+    @ResponseBody
+    public String grottoRoute(@RequestBody GrottoDTO[] grottos) throws InterruptedException, ApiException, IOException {
+        ArrayList<Location> locations = new ArrayList<>();
+        for (GrottoDTO grotto : grottos) {
+            Pair<Double, Double> latLong = geoLookup.latLngFromAddress(grotto.getAddress());
+            locations.add(new Location(grotto.name, latLong.getFirst(), latLong.getSecond()));
+        }
+        ArrayList<Location> tour = routePlanning.computeOptimalTour(locations, 1000);
+        return tour.stream()
+                .map(Location::getName)
+                .collect(Collectors.joining(","));
     }
 
 }

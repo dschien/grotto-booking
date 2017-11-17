@@ -1,11 +1,11 @@
-package ac.uk.bristol.cs.santa.grottobooking;
+package ac.uk.bristol.cs.santa.grottobooking.route;
 
-class Grotto {
+public class Location {
     private double longitude;
     private double latitude;
     private String name;
 
-    public Grotto(String name, int latitude, int longitude) {
+    public Location(String name, Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;

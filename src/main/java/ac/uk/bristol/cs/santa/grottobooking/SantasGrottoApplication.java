@@ -8,9 +8,9 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("file:${user.home}/.secret.properties")
 @SpringBootApplication
-public class GrottoBookingApplication {
+public class SantasGrottoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GrottoBookingApplication.class, args);
+        SpringApplication.run(SantasGrottoApplication.class, args);
     }
 }

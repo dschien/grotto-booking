@@ -17,8 +17,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasRole("USER")
                 .and()
                 .formLogin()
-                .loginPage("/login").failureUrl("/login-error")
-        ;
+                .loginPage("/login").failureUrl("/login-error");
+
+        http.csrf().disable();
+//                ignoringAntMatchers("/geolookup");
     }
 
     @Autowired

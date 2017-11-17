@@ -1,5 +1,6 @@
 package ac.uk.bristol.cs.santa.grottobooking;
 
+import ac.uk.bristol.cs.santa.grottobooking.business.GeoLookup;
 import com.google.maps.errors.ApiException;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ class TestGeoLookup {
 
     @Test
     void simple_test() throws InterruptedException, ApiException, IOException {
-        logger.info(geoLookup.geocode("35 Berkeley Square, BS8 1UB"));
+        logger.info(String.valueOf(geoLookup.latLngFromAddress("35 Berkeley Square, BS8 1UB")));
 
     }
 }
